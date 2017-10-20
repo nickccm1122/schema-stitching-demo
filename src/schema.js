@@ -27,6 +27,55 @@ const createRemoteExecutableSchema = async endpoint => {
   return executableSchema
 }
 
+/**
+ * create edges between two remote graphql
+ */
+const linkTypeDefs = `
+extend type Post {
+  comments: [Comment]
+}
+extend type Comment {
+  post: Post
+}
+`
+
+const linkResolvers = mergeInfo => ({
+  Post: {
+    comments: {
+      fragment: `fragment PostFragment on Post { id }`,
+      resolve (post, args, context, info) {
+        const postId = post.id
+        return mergeInfo.delegate(
+          'query',
+          'commentsByPostId',
+          {
+            postId
+          },
+          context,
+          info
+        )
+      }
+    }
+  },
+  Comment: {
+    post: {
+      fragment: `fragment CommentFragment on Comment { postId }`,
+      resolve (comment, args, context, info) {
+        const postId = comment.postId
+        return mergeInfo.delegate(
+          'query',
+          'post',
+          {
+            postId
+          },
+          context,
+          info
+        )
+      }
+    }
+  }
+})
+
 module.exports = async () => {
   /**
    * Generate remote schema
@@ -40,7 +89,8 @@ module.exports = async () => {
    * Merge them together
    */
   const mergedSchema = mergeSchemas({
-    schemas: [postsSchema, commentsSchema]
+    schemas: [postsSchema, commentsSchema, linkTypeDefs],
+    resolvers: linkResolvers
   })
 
   return mergedSchema
