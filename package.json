@@ -1,0 +1,32 @@
+{
+  "name": "schema-stitching-demo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "demo": "nodemon src --exec babel-node"
+  },
+  "keywords": [
+    "schema-stitching"
+  ],
+  "author": "Nick Chan",
+  "license": "MIT",
+  "dependencies": {
+    "apollo-link-http": "^0.8.0",
+    "apollo-server": "^0.3.3",
+    "apollo-server-koa": "^1.1.7",
+    "casual": "^1.5.17",
+    "graphql": "^0.11.7",
+    "graphql-tools": "^2.5.1",
+    "koa": "^2.3.0",
+    "koa-bodyparser": "^4.2.0",
+    "koa-router": "^7.2.1",
+    "node-fetch": "^1.7.3"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "nodemon": "^1.12.1"
+  }
+}
